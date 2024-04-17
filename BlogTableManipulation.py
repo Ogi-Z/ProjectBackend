@@ -1,5 +1,7 @@
 import DbConnection as Db
 
+
+
 # User tablosuna veri ekleme fonksiyonu
 def add_user(user_id, username, usersurname, useremail, userpassword, usercity, role_id):
     conn = Db.connect_to_database()
