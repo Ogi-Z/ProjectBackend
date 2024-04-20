@@ -75,10 +75,10 @@ For example when we try add_user function
         "user_id": 124,
         "username": "Ogi",
         "usersurname": "Ogi",
-    "useremail": "ogi@example.com",
-    "userpassword": "123",
-    "usercity": "Ankara",
-    "role_id": 0
+        "useremail": "ogi@example.com",
+        "userpassword": "123",
+        "usercity": "Ankara",
+        "role_id": 0
     }
 
 );
