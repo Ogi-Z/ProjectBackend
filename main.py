@@ -1,7 +1,44 @@
 import DbConnection as Db
 from flask import Flask, request, jsonify
+from flask_mail import Mail, Message
+import string
+import secrets
 
 app = Flask(__name__)
+app.config['MAIL_SERVER'] = 'smtp.yandex.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'tmpproject'  
+app.config['MAIL_PASSWORD'] = '123321asD.'  
+
+mail = Mail(app)
+
+
+# Doğrulama anahtarı oluşturma fonksiyonu
+def generate_verification_key(length=16):
+    """Generate a random verification key."""
+    characters = string.ascii_letters + string.digits
+    verification_key = ''.join(secrets.choice(characters) for _ in range(length))
+    return verification_key
+
+# E-posta gönderme fonksiyonu
+def send_email_with_verification_key(recipient_email):
+    """Send an email with the verification key."""
+    verification_key = generate_verification_key()
+    msg = Message("Account Verification", recipients=[recipient_email])
+    msg.body = f"Please click the following link to verify your account: http://127.0.0.1:5000/verify/{verification_key}"
+    # E-posta içeriğine doğrulama anahtarını eklemek için HTML şablonu kullanılabilir.
+    msg.html = f"""
+        <html>
+            <body>
+                <p>Please click the following link to verify your account:</p>
+                <a href="http://127.0.0.1:500/verify/{verification_key}">Verify Account</a>
+            </body>
+        </html>
+    """
+    mail.send(msg)
+    return verification_key
+
 
 # User tablosuna veri ekleme fonksiyonu
 def add_user(user_id, username, usersurname, useremail, userpassword, usercity, role_id):
@@ -87,20 +124,36 @@ def query_blog(blog_id):
     conn.close()
     return blog_data
 
+@app.route('/send_email')
+def send_email():
+    try:
+        # E-posta gönderme işlemi
+        msg = Message("Subject of the Email", recipients=["recipient@example.com"])
+        msg.body = "This is the plain text body of the email"
+        msg.html = "<p>This is the HTML body of the email</p>"
+        mail.send(msg)
+        return "Email sent successfully"
+    except Exception as e:
+        return str(e)
+
 @app.route('/add_user', methods=['POST'])
-def add_user_endpoint():
-    request_data = request.json
-    user_id = int(request_data.get('user_id'))
-    username = request_data.get('username')
-    usersurname = request_data.get('usersurname')
-    useremail = request_data.get('useremail')
-    userpassword = request_data.get('userpassword')
-    usercity = request_data.get('usercity')
-    role_id = int(request_data.get('role_id'))
-    
+def add_user():
+    # Kullanıcı bilgilerini al
+    user_id = request.form.get('user_id')
+    username = request.form.get('username')
+    usersurname = request.form.get('usersurname')
+    useremail = request.form.get('useremail')
+    userpassword = request.form.get('userpassword')
+    usercity = request.form.get('usercity')
+    role_id = request.form.get('role_id')
+
+    # Kullanıcı kaydı işlemi
+    verification_key = send_email_with_verification_key(useremail)
     add_user(user_id, username, usersurname, useremail, userpassword, usercity, role_id)
     
-    return jsonify({"message": "User added successfully"}), 200
+    return f"Verification key sent to {useremail}: {verification_key}"
+
+  
 
 # Tüm kullanıcıları getiren endpoint
 @app.route('/users', methods=['GET'])
