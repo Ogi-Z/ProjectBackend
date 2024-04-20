@@ -6,33 +6,55 @@ I design this Data Model Diagram for our project
 For the database you can use this query for build the DB
 
 CREATE DATABASE tempDB;
+
 -- User tablosunu oluşturma
+
 CREATE TABLE Users (
+
     UserID INTEGER PRIMARY KEY,
+    
     UserName VARCHAR(255),
+    
     UserSurname VARCHAR(255),
+    
     UserEmail VARCHAR(255),
+    
     UserPassword VARCHAR(255),
+    
     UserCity VARCHAR(255),
+    
     RoleID INTEGER
 );
 
 -- Blog tablosunu oluşturma
+
 CREATE TABLE Blog (
+
     UserID INTEGER,
+    
     BlogID INTEGER PRIMARY KEY,
+    
     BlogCategory VARCHAR(255),
+    
     BlogText TEXT,
+    
     FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
 
 -- SoftwareUsability tablosunu oluşturma
+
 CREATE TABLE SoftwareUsability (
+    
     UserID INTEGER,
+    
     SoftwareUsabilityID INTEGER PRIMARY KEY,
+    
     SoftwareUsabilitySoftware VARCHAR(255),
+    
     SoftwareUsabilityTopicName VARCHAR(255),
+    
     SoftwareUsabilityText TEXT,
+    
     FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
 
