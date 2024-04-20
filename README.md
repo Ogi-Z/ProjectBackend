@@ -69,14 +69,16 @@ For example when we try add_user function
 -SELECT BODY
 
 -PASTE THIS
+(
 
-{
-    "user_id": 124,
-    "username": "Ogi",
-    "usersurname": "Ogi",
+    {
+        "user_id": 124,
+        "username": "Ogi",
+        "usersurname": "Ogi",
     "useremail": "ogi@example.com",
     "userpassword": "123",
     "usercity": "Ankara",
     "role_id": 0
-}
+    }
 
+);
