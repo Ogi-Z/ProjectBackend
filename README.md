@@ -8,6 +8,7 @@ For the database you can use this query for build the DB
 CREATE DATABASE tempDB;
 
 -- User tablosunu oluşturma(
+
     CREATE TABLE Users (
 
         UserID INTEGER PRIMARY KEY,
