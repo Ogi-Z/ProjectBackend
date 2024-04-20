@@ -8,9 +8,13 @@ If you wanna test the code you can use Postman for POST and GET request for func
 
 For example when we try add_user function
 -SELECT POST FUNCTION IN POSTMAN 
--TYPE THE LINK "http://127.0.0.1:5000/add_user" 
+
+-TYPE THE LINK "http://127.0.0.1:5000/add_user"
+
 -SELECT BODY
+
 -PASTE THIS
+
 {
     "user_id": 124,
     "username": "Ogi",
