@@ -21,30 +21,35 @@ def generate_verification_key(length=16):
     verification_key = ''.join(secrets.choice(characters) for _ in range(length))
     return verification_key
 
-# E-posta gönderme fonksiyonu
-def send_email_with_verification_key(recipient_email):
-    """Send an email with the verification key."""
-    verification_key = generate_verification_key()
-    msg = Message("Account Verification", recipients=[recipient_email])
-    msg.body = f"Please click the following link to verify your account: http://127.0.0.1:5000/verify/{verification_key}"
-    # E-posta içeriğine doğrulama anahtarını eklemek için HTML şablonu kullanılabilir.
-    msg.html = f"""
-        <html>
-            <body>
-                <p>Please click the following link to verify your account:</p>
-                <a href="http://127.0.0.1:500/verify/{verification_key}">Verify Account</a>
-            </body>
-        </html>
-    """
-    mail.send(msg)
-    return verification_key
 
+    
+
+
+# E-posta gönderme fonksiyonu
+def send_email_with_verification_key(recipient_email, verification_key):
+    try:
+        # E-posta gönderme işlemi
+        msg = Message("Account Verification", recipients=[recipient_email])
+        msg.body = f"Please click the following link to verify your account: http://127.0.0.1:5000/verify/{verification_key}"
+        # E-posta içeriğine doğrulama anahtarını eklemek için HTML şablonu kullanılabilir.
+        msg.html = f"""
+            <html>
+                <body>
+                    <p>Please click the following link to verify your account:</p>
+                    <a href="http://127.0.0.1:5000/verify/{verification_key}">Verify Account</a>
+                </body>
+            </html>
+        """
+        mail.send(msg)
+        print("Email sent successfully")  # Hata ayıklama çıktısı ekle
+    except Exception as e:
+        print(f"Error sending email: {e}")  # Hata ayıklama çıktısı ekle
 
 # User tablosuna veri ekleme fonksiyonu
-def add_user(user_id, username, usersurname, useremail, userpassword, usercity, role_id):
+def add_user(username, usersurname, useremail, userpassword, usercity, role_id, verification_key):
     conn = Db.connect_to_database()
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO Users (UserID, UserName, UserSurname, UserEmail, UserPassword, UserCity, RoleID) VALUES (%s, %s, %s, %s, %s, %s, %s)", (user_id, username, usersurname, useremail, userpassword, usercity, role_id))
+    cursor.execute("INSERT INTO users (UserName, UserSurname, UserEmail, UserPassword, UserCity, RoleID, VerificationKey) VALUES (%s, %s, %s, %s, %s, %s, %s)", (username, usersurname, useremail, userpassword, usercity, role_id, verification_key))
     conn.commit()
     conn.close()
 
@@ -123,6 +128,63 @@ def query_blog(blog_id):
     blog_data = cursor.fetchone()
     conn.close()
     return blog_data
+def login_user(email, password):
+    # Kullanıcıyı veritabanında bul
+    cursor.execute("SELECT * FROM Users WHERE Email = %s AND Password = %s", (email, password))
+    user = cursor.fetchone()
+    if user:
+        # Kullanıcı doğrulanmış mı kontrol et
+        if user['IsVerified']:
+            # Kullanıcı giriş yapabilir
+            return True
+        else:
+            # Kullanıcı doğrulanmamış
+            return False
+    else:
+        # Kullanıcı bulunamadı
+        return False
+def verify_user(email, verification_key):
+    # Veritabanında kullanıcıyı bul ve doğrulama anahtarını kontrol et
+    cursor.execute("SELECT * FROM Users WHERE Email = %s AND VerificationKey = %s", (email, verification_key))
+    user = cursor.fetchone()
+    if user:
+        # Kullanıcıyı doğrula
+        cursor.execute("UPDATE Users SET IsVerified = TRUE WHERE Email = %s", (email,))
+        conn.commit()
+        return True
+    else:
+        return False
+
+@app.route('/login', methods=['POST'])
+def login():
+    # İstek verilerini al
+    request_data = request.json
+    useremail = request_data.get('useremail')
+    userpassword = request_data.get('userpassword')
+
+    # Veritabanından kullanıcıyı sorgula
+    conn = Db.connect_to_database()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM users WHERE useremail = %s", (useremail,))
+    user = cursor.fetchone()
+    conn.close()
+
+    if user:
+        # Kullanıcı bulundu, şifreyi kontrol et
+        if user[4] == userpassword:  # userpassword indeksi veritabanındaki şifre sütununa bağlı olabilir
+            # Şifre doğru, kullanıcı doğrulama durumunu kontrol et
+            if user[7]:  # isverified indeksi veritabanındaki isverified sütununa bağlı olabilir
+                # Kullanıcı doğrulanmış, giriş başarılı
+                return jsonify({'success': True}), 200
+            else:
+                # Kullanıcı doğrulanmamış, giriş başarısız
+                return jsonify({'success': False, 'message': 'User is not verified'}), 401
+        else:
+            # Şifre yanlış, giriş başarısız
+            return jsonify({'success': False, 'message': 'Invalid password'}), 401
+    else:
+        # Kullanıcı bulunamadı, giriş başarısız
+        return jsonify({'success': False, 'message': 'User not found'}), 404
 
 @app.route('/send_email')
 def send_email():
@@ -137,20 +199,22 @@ def send_email():
         return str(e)
 
 @app.route('/add_user', methods=['POST'])
-def add_user():
+def add_user_endpoint():
+    request_data = request.json
     # Kullanıcı bilgilerini al
-    user_id = request.form.get('user_id')
-    username = request.form.get('username')
-    usersurname = request.form.get('usersurname')
-    useremail = request.form.get('useremail')
-    userpassword = request.form.get('userpassword')
-    usercity = request.form.get('usercity')
-    role_id = request.form.get('role_id')
+    username = request_data.get('username')
+    usersurname = request_data.get('usersurname')
+    useremail = request_data.get('useremail')
+    userpassword = request_data.get('userpassword')
+    usercity = request_data.get('usercity')
+    role_id = request_data.get('role_id')
+    conn = Db.connect_to_database()
+    verification_key = generate_verification_key()
+    print (verification_key)
+    add_user(username, usersurname, useremail, userpassword, usercity, role_id, verification_key)
 
-    # Kullanıcı kaydı işlemi
-    verification_key = send_email_with_verification_key(useremail)
-    add_user(user_id, username, usersurname, useremail, userpassword, usercity, role_id)
-    
+    send_email_with_verification_key(useremail, verification_key)
+
     return f"Verification key sent to {useremail}: {verification_key}"
 
   
