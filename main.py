@@ -3,6 +3,9 @@ from flask import Flask, request, jsonify
 from flask_mail import Mail, Message
 import string
 import secrets
+import selenium
+import mailService as ms
+
 
 app = Flask(__name__)
 app.config['MAIL_SERVER'] = 'smtp.yandex.com'
@@ -22,7 +25,7 @@ def generate_verification_key(length=16):
     return verification_key
 
 
-    
+
 
 
 # E-posta gönderme fonksiyonu
@@ -130,6 +133,8 @@ def query_blog(blog_id):
     return blog_data
 def login_user(email, password):
     # Kullanıcıyı veritabanında bul
+    conn = Db.connect_to_database()
+    cursor = conn.cursor()
     cursor.execute("SELECT * FROM Users WHERE Email = %s AND Password = %s", (email, password))
     user = cursor.fetchone()
     if user:
@@ -186,18 +191,6 @@ def login():
         # Kullanıcı bulunamadı, giriş başarısız
         return jsonify({'success': False, 'message': 'User not found'}), 404
 
-@app.route('/send_email')
-def send_email():
-    try:
-        # E-posta gönderme işlemi
-        msg = Message("Subject of the Email", recipients=["recipient@example.com"])
-        msg.body = "This is the plain text body of the email"
-        msg.html = "<p>This is the HTML body of the email</p>"
-        mail.send(msg)
-        return "Email sent successfully"
-    except Exception as e:
-        return str(e)
-
 @app.route('/add_user', methods=['POST'])
 def add_user_endpoint():
     request_data = request.json
@@ -211,13 +204,19 @@ def add_user_endpoint():
     conn = Db.connect_to_database()
     verification_key = generate_verification_key()
     print (verification_key)
+    # E-posta gönderme işlemi
+    ms.send_mail(useremail, verification_key)
     add_user(username, usersurname, useremail, userpassword, usercity, role_id, verification_key)
-
-    send_email_with_verification_key(useremail, verification_key)
-
     return f"Verification key sent to {useremail}: {verification_key}"
 
   
+@app.route('/verify/<verification_key>', methods=['GET'])
+def verify(verification_key):
+    # Kullanıcıyı doğrula
+    if verify_user(verification_key):
+        return "User verified successfully"
+    else:
+        return "Invalid verification key"
 
 # Tüm kullanıcıları getiren endpoint
 @app.route('/users', methods=['GET'])
