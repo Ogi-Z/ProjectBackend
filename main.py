@@ -5,7 +5,8 @@ import string
 import secrets
 import selenium
 import mailService as ms
-
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 
 app = Flask(__name__)
 app.config['MAIL_SERVER'] = 'smtp.yandex.com'
@@ -23,10 +24,6 @@ def generate_verification_key(length=16):
     characters = string.ascii_letters + string.digits
     verification_key = ''.join(secrets.choice(characters) for _ in range(length))
     return verification_key
-
-
-
-
 
 # E-posta gönderme fonksiyonu
 def send_email_with_verification_key(recipient_email, verification_key):
@@ -139,7 +136,7 @@ def login_user(email, password):
     user = cursor.fetchone()
     if user:
         # Kullanıcı doğrulanmış mı kontrol et
-        if user['IsVerified']:
+        if user['SELECT * FROM Users Where IsVerified = True']:
             # Kullanıcı giriş yapabilir
             return True
         else:
@@ -154,7 +151,7 @@ def verify_user(email, verification_key):
     user = cursor.fetchone()
     if user:
         # Kullanıcıyı doğrula
-        cursor.execute("UPDATE Users SET IsVerified = TRUE WHERE Email = %s", (email,))
+        cursor.execute("UPDATE Users SET isverified = TRUE WHERE Email = %s", (email,))
         conn.commit()
         return True
     else:
@@ -172,24 +169,30 @@ def login():
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM users WHERE useremail = %s", (useremail,))
     user = cursor.fetchone()
-    conn.close()
+
+
 
     if user:
-        # Kullanıcı bulundu, şifreyi kontrol et
-        if user[4] == userpassword:  # userpassword indeksi veritabanındaki şifre sütununa bağlı olabilir
-            # Şifre doğru, kullanıcı doğrulama durumunu kontrol et
-            if user[7]:  # isverified indeksi veritabanındaki isverified sütununa bağlı olabilir
-                # Kullanıcı doğrulanmış, giriş başarılı
+        if user[4] == userpassword:  
+            # Sifre Dogru, isverified kontrolu yapma
+            cursor.execute("SELECT * FROM users WHERE useremail = %s AND isverified = true", (useremail,))
+            verified_user = cursor.fetchone()
+
+            if verified_user:
+            # Hersey Dogru, login basarili
                 return jsonify({'success': True}), 200
             else:
-                # Kullanıcı doğrulanmamış, giriş başarısız
+            # User verify edilmemis, login basarisiz
                 return jsonify({'success': False, 'message': 'User is not verified'}), 401
         else:
-            # Şifre yanlış, giriş başarısız
+            # Sifre Yanlıs, login basarisiz
             return jsonify({'success': False, 'message': 'Invalid password'}), 401
     else:
-        # Kullanıcı bulunamadı, giriş başarısız
+        # User bulunamadı, login basarisiz
         return jsonify({'success': False, 'message': 'User not found'}), 404
+
+
+    conn.close()
 
 @app.route('/add_user', methods=['POST'])
 def add_user_endpoint():
