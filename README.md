@@ -7,23 +7,27 @@ For the database you can use this query for build the DB
 
 CREATE DATABASE tempDB;
 
--- User tablosunu oluşturma(
+    -- User tablosunu oluşturma(
 
-    CREATE TABLE Users (
+    CREATE TABLE IF NOT EXISTS Users (
 
-        UserID INTEGER PRIMARY KEY,
+        UserID SERIAL PRIMARY KEY,
     
         UserName VARCHAR(255),
     
         UserSurname VARCHAR(255),
     
-        UserEmail VARCHAR(255),
+        UserEmail VARCHAR(255) UNIQUE,
     
         UserPassword VARCHAR(255),
     
         UserCity VARCHAR(255),
     
-        RoleID INTEGER
+        RoleID INTEGER,
+    
+        VerificationKey VARCHAR(100),
+    
+        IsVerified BOOLEAN DEFAULT FALSE
     );
 
     -- Blog tablosunu oluşturma
@@ -57,6 +61,30 @@ CREATE DATABASE tempDB;
     
         FOREIGN KEY (UserID) REFERENCES Users(UserID)
     );
+
+    -- SoftwareUsability Owner tablosunu oluşturma
+    CREATE TABLE IF NOT EXISTS SoftwareOwner (
+
+    OwnerID SERIAL PRIMARY KEY,
+
+    OwnerName VARCHAR(255),
+    
+    OwnerSurname VARCHAR(255),
+    
+    OwnerEmail VARCHAR(255) UNIQUE,
+    
+    OwnerPassword VARCHAR(255),
+    
+    OwnerCity VARCHAR(255),
+    
+    RoleID INTEGER,
+    
+    VerificationKey VARCHAR(100),
+    
+    IsVerified BOOLEAN DEFAULT FALSE
+
+    );
+
 );
 
 If you wanna test the code you can use Postman for POST and GET request for functions that declared in our project proposal
@@ -68,11 +96,12 @@ For example when we try add_user function
 
 -SELECT BODY
 
+-SELECT raw
+
 -PASTE THIS
 (
 
     {
-        "user_id": 124,
         "username": "Ogi",
         "usersurname": "Ogi",
         "useremail": "ogi@example.com",
