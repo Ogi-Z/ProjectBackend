@@ -4,6 +4,7 @@ from flask import Flask, request, jsonify
 import secrets
 import MailSender as ms
 
+# Software Owner ekleme fonksiyonu
 def add_softwareOwner(username, usersurname, useremail, userpassword, usercity, role_id, verification_key):
     conn = Db.connect_to_database()
     cursor = conn.cursor()
@@ -11,7 +12,7 @@ def add_softwareOwner(username, usersurname, useremail, userpassword, usercity, 
     conn.commit()
     conn.close()
 
-# User tablosundan belirli bir UserID'ye göre veri silme fonksiyonu
+# SoftwareOwner tablosundan belirli bir SoftwareOwnerID'ye göre veri silme fonksiyonu
 def delete_user(user_id):
     conn = Db.connect_to_database()
     cursor = conn.cursor()
@@ -19,8 +20,8 @@ def delete_user(user_id):
     conn.commit()
     conn.close()
 
-# Belirli bir UserID'ye göre User tablosundan veri sorgulama fonksiyonu
-def query_user(user_id):
+# Belirli bir SoftwareOwnerID'ye göre Softwareowner tablosundan veri sorgulama fonksiyonu
+def query_owner(user_id):
     conn = Db.connect_to_database()
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM softwareowner WHERE OwnerID=%s", (user_id,))
@@ -28,8 +29,8 @@ def query_user(user_id):
     conn.close()
     return user_data
 
-# Tüm kullanıcıları getiren fonksiyon
-def get_all_users():
+# Tüm softwareOwnerları getiren fonksiyon
+def get_all_owners():
     conn = Db.connect_to_database()
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM softwareowner")
@@ -46,7 +47,7 @@ def login_owner(email, password):
     
     if user:
         # Kullanıcı doğrulanmış mı kontrol et
-        if user['SELECT * FROM Users Where IsVerified = True']:
+        if user['SELECT * FROM softwareowner Where IsVerified = True']:
             # Kullanıcı giriş yapabilir
             conn.close()
             return True
@@ -61,11 +62,11 @@ def verify_owner(verificationkey):
     # Veritabanında kullanıcıyı bul ve doğrulama anahtarını kontrol et
     conn = Db.connect_to_database()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM users WHERE verificationKey = %s", (verificationkey,))
+    cursor.execute("SELECT * FROM softwareowner WHERE verificationKey = %s", (verificationkey,))
     user = cursor.fetchone()
     conn.close()
     if user:
-        print("User verified successfully")
+        print("Software Owner verified successfully")
         return True
     else:
         return False

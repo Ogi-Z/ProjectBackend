@@ -6,7 +6,7 @@ import MailSender as ms
 import userFunctions as uf
 import softwareUsabilityFunctions as sUF
 import blogFunctions as bF
-
+import softwareOwnerFunctions as so
 app = Flask(__name__)
 
 # Doğrulama anahtarı oluşturma fonksiyonu
@@ -170,7 +170,7 @@ def delete_blog_endpoint(blog_id):
     bF.delete_blog(blog_id)
     return jsonify({"message": "Blog deleted successfully"}), 200
 
-# Tüm kullanıcıları getiren endpoint
+# Tüm blogları getiren endpoint
 @app.route('/blogs', methods=['GET'])
 def get_all_blogs_endpoint():
     blog = bF.get_all_blogs()
@@ -178,7 +178,83 @@ def get_all_blogs_endpoint():
         return jsonify(blog), 200
     else:
         return jsonify({"message": "No users found"}), 404
+# Tüm software ownerları getiren endpoint  
+@app.route('/softwareowners', methods=['GET'])
+def get_all_softwareowners_endpoint():
+    owners = so.get_all_owners()
+    if owners:
+        return jsonify(owners), 200
+    else:
+        return jsonify({"message": "No Software Owner found"}), 404
+    
+# Software Owner ekleme endpointi
+@app.route('/add_softwareowner', methods=['POST'])
+def add_owner_endpoint():
+    request_data = request.json
+    # Kullanıcı bilgilerini al
+    username = request_data.get('username')
+    usersurname = request_data.get('usersurname')
+    useremail = request_data.get('useremail')
+    userpassword = request_data.get('userpassword')
+    usercity = request_data.get('usercity')
+    role_id = request_data.get('role_id')
+    conn = Db.connect_to_database()
+    verification_key = generate_verification_key()
+    print (verification_key)
+    # E-posta gönderme işlemi
+    so.add_softwareOwner(username, usersurname, useremail, userpassword, usercity, role_id, verification_key)
+    ms.sendMailSoftwareOwner(useremail, verification_key)
+    
+    return f"Your register request send to admin"
 
+# Software Ownerlar için giriş
+@app.route('/ownerlogin', methods=['POST'])
+def ownerlogin():
+    # İstek verilerini al
+    request_data = request.json
+    useremail = request_data.get('useremail')
+    userpassword = request_data.get('userpassword')
+    # Veritabanından kullanıcıyı sorgula
+    conn = Db.connect_to_database()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM softwareowner WHERE owneremail = %s", (useremail,))
+    user = cursor.fetchone()
+    if user:
+        if user[4] == userpassword:  
+            # Sifre Dogru, isverified kontrolu yapma
+            cursor.execute("SELECT * FROM softwareowner WHERE owneremail = %s AND isverified = true", (useremail,))
+            verified_owner = cursor.fetchone()
+            conn.close()
+            if verified_owner:
+            # Hersey Dogru, login basarili
+                return jsonify({'success': True}), 200
+            else:
+            # User verify edilmemis, login basarisiz
+                return jsonify({'success': False, 'message': 'Owner is not verified'}), 401
+        else:
+            # Sifre Yanlıs, login basarisiz
+            return jsonify({'success': False, 'message': 'Invalid password'}), 401
+    else:
+        # User bulunamadı, login basarisiz
+        conn.close()
+        return jsonify({'success': False, 'message': 'Owner not found'}), 404
+@app.route('/verifyowner', methods=['GET'])
+def verifyOwner():
+    # Kullanıcıyı doğrula
+    request_data = request.json
+    verificationkeys = request_data.get('verificationkey')
+    conn = Db.connect_to_database()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM softwareowner WHERE verificationKey = %s", (verificationkeys,))
+    user = cursor.fetchone()
+    if user:
+        cursor.execute("UPDATE softwareowner SET isverified = TRUE WHERE verificationkey= %s", (verificationkeys,))
+        conn.commit()
+        conn.close()
+        return "SoftwareOwner verified successfully"
+    else:
+        conn.close()
+        return "Invalid verification key"
 
 if __name__ == '__main__':
     app.run(debug=True)
