@@ -7,7 +7,10 @@ import userFunctions as uf
 import softwareUsabilityFunctions as sUF
 import blogFunctions as bF
 import softwareOwnerFunctions as so
+from flask_cors import CORS
+
 app = Flask(__name__)
+CORS(app)
 
 # Doğrulama anahtarı oluşturma fonksiyonu
 def generate_verification_key(length=16):
