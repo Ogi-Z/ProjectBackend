@@ -68,7 +68,7 @@ def add_user_endpoint():
     uf.add_user(username, usersurname, useremail, userpassword, usercity, role_id, verification_key)
     return f"Verification key sent to {useremail}: {verification_key}"
  
-@app.route('/verify', methods=['GET'])
+@app.route('/verify', methods=['POST'])
 def verify():
     # Kullanıcıyı doğrula
     request_data = request.json
@@ -81,10 +81,10 @@ def verify():
         cursor.execute("UPDATE users SET isverified = TRUE WHERE verificationkey= %s", (verificationkeys,))
         conn.commit()
         conn.close()
-        return "User verified successfully"
+        return "User verified successfully",200
     else:
         conn.close()
-        return "Invalid verification key"
+        return "Invalid verification key",401
 
 # Tüm kullanıcıları getiren endpoint
 @app.route('/users', methods=['GET'])
