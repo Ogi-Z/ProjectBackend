@@ -44,7 +44,7 @@ def login():
                 return jsonify({'success': False, 'message': 'User is not verified'}), 401
         else:
             # Sifre Yanlıs, login basarisiz
-            return jsonify({'success': False, 'message': 'Invalid password'}), 401
+            return jsonify({'success': False, 'message': 'Invalid password'}), 409
     else:
         # User bulunamadı, login basarisiz
         conn.close()
