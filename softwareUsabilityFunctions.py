@@ -7,7 +7,13 @@ import secrets
 def add_softwareUsability(user_id, SoftwareUsabilityID, SoftwareUsabilitySoftware, SoftwareUsabilityTopicName, SoftwareUsabilityText):
     conn = Db.connect_to_database()
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO SoftwareUsability (userid, softwareusabilityid, softwareusabilitysoftware, softwareusabilitytopicname, softwareusabilitytext) VALUES (?, ?, ?, ?, ?)", (user_id, SoftwareUsabilityID, SoftwareUsabilitySoftware, SoftwareUsabilityTopicName, SoftwareUsabilityText))
+    cursor.execute(
+            """
+            INSERT INTO softwareusability (userid, softwareusabilityid, softwareusabilitysoftware, softwareusabilitytopicname, softwareusabilitytext)
+            VALUES (%s, %s, %s, %s, %s)
+            """,
+            (user_id, SoftwareUsabilityID, SoftwareUsabilitySoftware, SoftwareUsabilityTopicName, SoftwareUsabilityText)
+        )
     conn.commit()
     conn.close()
 
