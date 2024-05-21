@@ -7,7 +7,7 @@ import secrets
 def add_softwareUsability(user_id, SoftwareUsabilityID, SoftwareUsabilitySoftware, SoftwareUsabilityTopicName, SoftwareUsabilityText):
     conn = Db.connect_to_database()
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO SoftwareUsability (UserID, SoftwareUsabilityID, SoftwareUsabilitySoftware, SoftwareUsabilityTopicName, SoftwareUsabilityText) VALUES (?, ?, ?, ?, ?)", (user_id, SoftwareUsabilityID, SoftwareUsabilitySoftware, SoftwareUsabilityTopicName, SoftwareUsabilityText))
+    cursor.execute("INSERT INTO SoftwareUsability (userid, softwareusabilityid, softwareusabilitysoftware, softwareusabilitytopicname, softwareusabilitytext) VALUES (?, ?, ?, ?, ?)", (user_id, SoftwareUsabilityID, SoftwareUsabilitySoftware, SoftwareUsabilityTopicName, SoftwareUsabilityText))
     conn.commit()
     conn.close()
 
@@ -15,7 +15,7 @@ def add_softwareUsability(user_id, SoftwareUsabilityID, SoftwareUsabilitySoftwar
 def delete_softwareUsability(SoftwareUsabilityID):
     conn = Db.connect_to_database()
     cursor = conn.cursor()
-    cursor.execute("DELETE FROM Blog WHERE SoftwareUsabilityID=?", (SoftwareUsabilityID,))
+    cursor.execute("DELETE FROM SoftwareUsability WHERE SoftwareUsabilityID=?", (SoftwareUsabilityID,))
     conn.commit()
     conn.close()
 
