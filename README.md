@@ -41,6 +41,8 @@ CREATE DATABASE tempDB;
         BlogCategory VARCHAR(255),
     
         BlogText TEXT,
+
+        BlogImage BYTEA,
     
         FOREIGN KEY (UserID) REFERENCES Users(UserID)
     );
@@ -58,6 +60,8 @@ CREATE DATABASE tempDB;
         SoftwareUsabilityTopicName VARCHAR(255),
     
         SoftwareUsabilityText TEXT,
+
+        SoftwareUsabilityImage BYTEA,
     
         FOREIGN KEY (UserID) REFERENCES Users(UserID)
     );
