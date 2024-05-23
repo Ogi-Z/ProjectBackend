@@ -36,11 +36,25 @@ def query_softwareUsability(SoftwareUsabilityID):
     conn.close()
     return softwareUsability_data
 
+def get_all_softwareUsabilityUnApproved():
+    conn = Db.connect_to_database()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM SoftwareUsability WHERE Approved = False")
+    users = cursor.fetchall()
+    conn.close()
+    return users
 # Tüm SoftwareUsabilityleri getiren fonksiyon
 def get_all_softwareUsability():
     conn = Db.connect_to_database()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM SoftwareUsability")
+    cursor.execute("SELECT * FROM SoftwareUsability WHERE Approved = True")
     users = cursor.fetchall()
     conn.close()
     return users
+
+def approve_softwareusability(softwareusability_id):
+    conn = Db.connect_to_database()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE softwareusability SET Approved = True WHERE softwareusabilityid=%s", (softwareusability_id,))
+    conn.commit()
+    conn.close()
