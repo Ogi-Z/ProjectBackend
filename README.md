@@ -34,15 +34,17 @@ CREATE DATABASE tempDB;
 
     CREATE TABLE Blog (
 
+        BlogID SERIAL PRIMARY KEY,
+
         UserID INTEGER,
-    
-        BlogID INTEGER PRIMARY KEY,
     
         BlogCategory VARCHAR(255),
     
         BlogText TEXT,
 
         BlogImage BYTEA,
+
+        Approved BOOLEAN DEFAULT FALSE,
     
         FOREIGN KEY (UserID) REFERENCES Users(UserID)
     );
@@ -50,10 +52,10 @@ CREATE DATABASE tempDB;
     -- SoftwareUsability tablosunu oluşturma
 
     CREATE TABLE SoftwareUsability (
-    
+
+        SoftwareUsabilityID SERIAL PRIMARY KEY,
+        
         UserID INTEGER,
-    
-        SoftwareUsabilityID INTEGER PRIMARY KEY,
     
         SoftwareUsabilitySoftware VARCHAR(255),
     
@@ -62,7 +64,9 @@ CREATE DATABASE tempDB;
         SoftwareUsabilityText TEXT,
 
         SoftwareUsabilityImage BYTEA,
-    
+
+    	Approved BOOLEAN DEFAULT FALSE,
+     
         FOREIGN KEY (UserID) REFERENCES Users(UserID)
     );
 
