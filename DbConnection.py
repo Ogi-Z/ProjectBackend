@@ -1,5 +1,6 @@
 import psycopg2
 
+# Veritabanı bağlantısını yapar
 def connect_to_database():
     try:
         # Veritabanı bağlantısını yap

@@ -36,6 +36,7 @@ def query_softwareUsability(SoftwareUsabilityID):
     conn.close()
     return softwareUsability_data
 
+# Tüm SoftwareUsabilityleri getiren fonksiyon
 def get_all_softwareUsabilityUnApproved():
     conn = Db.connect_to_database()
     cursor = conn.cursor()
@@ -52,6 +53,7 @@ def get_all_softwareUsability():
     conn.close()
     return users
 
+# SoftwareUsability onaylama fonksiyonu
 def approve_softwareusability(softwareusability_id):
     conn = Db.connect_to_database()
     cursor = conn.cursor()

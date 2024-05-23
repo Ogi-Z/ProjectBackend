@@ -63,6 +63,7 @@ def verify_owner(verificationkey):
     else:
         return False
     
+# Blog approve etme fonksiyonu
 def approve_blog(blog_id):
     conn = Db.connect_to_database()
     cursor = conn.cursor()

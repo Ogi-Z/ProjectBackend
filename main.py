@@ -129,6 +129,7 @@ def add_softwareUsability_endpoint():
         sUF.add_softwareUsability(user_id, SoftwareUsabilitySoftware, SoftwareUsabilityTopicName, SoftwareUsabilityText)
 
     return jsonify({"message": "Software usability added successfully"}), 200
+
 # Tüm SoftwareUsabilityleri getiren endpoint
 @app.route('/softwareUsability', methods=['GET'])
 def get_all_softwareUsabilitys_endpoint():

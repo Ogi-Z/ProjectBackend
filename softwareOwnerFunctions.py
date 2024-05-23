@@ -38,6 +38,7 @@ def get_all_owners():
     conn.close()
     return users
 
+# SoftwareOwner login fonksiyonu
 def login_owner(email, password):
     # Kullanıcıyı veritabanında bul
     conn = Db.connect_to_database()
@@ -58,6 +59,9 @@ def login_owner(email, password):
     else:
         # Kullanıcı bulunamadı
         return False
+    
+
+# SoftwareOwner verify etme fonksiyonu
 def verify_owner(verificationkey):
     # Veritabanında kullanıcıyı bul ve doğrulama anahtarını kontrol et
     conn = Db.connect_to_database()
@@ -70,3 +74,4 @@ def verify_owner(verificationkey):
         return True
     else:
         return False
+    
