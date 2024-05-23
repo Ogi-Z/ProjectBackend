@@ -329,5 +329,14 @@ def unapprovedSoftwareUsability():
     else:
         return jsonify({"message": "No Software Usability found"}), 404
     
+# Unapproved Blog
+@app.route('/unapprovedblogs', methods=['GET'])
+def unapprovedBlogs():
+    blog = bF.get_all_unapprovedblogs()
+    if blog:
+        return jsonify(blog), 200
+    else:
+        return jsonify({"message": "No users found"}), 404
+    
 if __name__ == '__main__':
     app.run(debug=True)

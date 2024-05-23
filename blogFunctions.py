@@ -49,6 +49,14 @@ def get_all_blogs():
     users = cursor.fetchall()
     conn.close()
     return users
+# Tüm unapprowed blogları getiren fonksiyon
+def get_all_unapprovedblogs():
+    conn = Db.connect_to_database()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM Blog Where Approved = False")
+    users = cursor.fetchall()
+    conn.close()
+    return users
 
 def verify_owner(verificationkey):
     # Veritabanında kullanıcıyı bul ve doğrulama anahtarını kontrol et
