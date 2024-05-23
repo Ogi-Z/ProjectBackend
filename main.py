@@ -115,11 +115,17 @@ def delete_user_endpoint(user_id):
 def add_softwareUsability_endpoint():
     request_data = request.json
     user_id = request_data.get('user_id')
-    SoftwareUsabilityID = request_data.get('SoftwareUsabilityID')
     SoftwareUsabilitySoftware = request_data.get('SoftwareUsabilitySoftware')
     SoftwareUsabilityTopicName = request_data.get('SoftwareUsabilityTopicName')
     SoftwareUsabilityText = request_data.get('SoftwareUsabilityText')
-    sUF.add_softwareUsability(user_id, SoftwareUsabilityID, SoftwareUsabilitySoftware, SoftwareUsabilityTopicName, SoftwareUsabilityText)
+    if 'image' in request.files:
+        file = request.files['image']
+        image_data = file.read()
+        sUF.add_softwareUsability_with_image(user_id, SoftwareUsabilitySoftware, SoftwareUsabilityTopicName, SoftwareUsabilityText,image_data)
+    else:
+        image_data = None
+        sUF.add_softwareUsability(user_id, SoftwareUsabilitySoftware, SoftwareUsabilityTopicName, SoftwareUsabilityText)
+
     return jsonify({"message": "Software usability added successfully"}), 200
 # Tüm SoftwareUsabilityleri getiren endpoint
 @app.route('/softwareUsability', methods=['GET'])
@@ -150,12 +156,15 @@ def delete_softwareUsability_endpoint(SoftwareUsabilityID):
 def add_blog_endpoint():
     request_data = request.json
     user_id = request_data.get('user_id')
-    blog_id = request_data.get('blog_id')
     blog_category = request_data.get('blog_category')
     blog_text = request_data.get('blog_text')
-    
-    bF.add_blog(user_id, blog_id, blog_category, blog_text)
-    
+    if 'image' in request.files:
+        file = request.files['image']
+        image_data = file.read()
+        bF.add_blog_with_image(user_id, blog_category, blog_text,image_data)
+    else:
+        image_data = None
+        bF.add_blog(user_id, blog_category, blog_text)
     return jsonify({"message": "Blog added successfully"}), 200
 
 # Belirli bir BlogID'ye göre Blog tablosundan veri sorgulama endpoint'i
