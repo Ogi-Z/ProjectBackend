@@ -320,5 +320,14 @@ def approveSoftwareUsability():
         conn.close()
         return "Invalid software usability id"
     
+# Unapprowed Software Usability
+@app.route('/unapprovedsoftwareusability', methods=['GET'])
+def unapprovedSoftwareUsability():
+    softwareUsability = sUF.get_all_softwareUsabilityUnApproved()
+    if softwareUsability:
+        return jsonify(softwareUsability), 200
+    else:
+        return jsonify({"message": "No Software Usability found"}), 404
+    
 if __name__ == '__main__':
     app.run(debug=True)
