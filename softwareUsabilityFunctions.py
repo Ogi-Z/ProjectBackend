@@ -4,16 +4,18 @@ from flask import Flask, request, jsonify
 import secrets
 
 # SoftwareUsability tablosuna veri ekleme fonksiyonu
-def add_softwareUsability(user_id, SoftwareUsabilityID, SoftwareUsabilitySoftware, SoftwareUsabilityTopicName, SoftwareUsabilityText):
+def add_softwareUsability(user_id, SoftwareUsabilitySoftware, SoftwareUsabilityTopicName, SoftwareUsabilityText):
     conn = Db.connect_to_database()
     cursor = conn.cursor()
-    cursor.execute(
-            """
-            INSERT INTO softwareusability (userid, softwareusabilityid, softwareusabilitysoftware, softwareusabilitytopicname, softwareusabilitytext)
-            VALUES (%s, %s, %s, %s, %s)
-            """,
-            (user_id, SoftwareUsabilityID, SoftwareUsabilitySoftware, SoftwareUsabilityTopicName, SoftwareUsabilityText)
-        )
+    cursor.execute("INSERT INTO SoftwareUsability (userid, softwareusabilitysoftware, softwareusabilitytopicname, softwareusabilitytext) VALUES (%s, %s, %s, %s)", (user_id, SoftwareUsabilitySoftware, SoftwareUsabilityTopicName, SoftwareUsabilityText))
+    conn.commit()
+    conn.close()
+
+# SoftwareUsability tablosuna veri ekleme fonksiyonu
+def add_softwareUsability_with_image(user_id, SoftwareUsabilitySoftware, SoftwareUsabilityTopicName, SoftwareUsabilityText, image_data):
+    conn = Db.connect_to_database()
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO SoftwareUsability (userid, softwareusabilitysoftware, softwareusabilitytopicname, softwareusabilitytext, SoftwareUsabilityImage) VALUES (%s, %s, %s, %s, %s)", (user_id, SoftwareUsabilitySoftware, SoftwareUsabilityTopicName, SoftwareUsabilityText,image_data))
     conn.commit()
     conn.close()
 
@@ -21,7 +23,7 @@ def add_softwareUsability(user_id, SoftwareUsabilityID, SoftwareUsabilitySoftwar
 def delete_softwareUsability(SoftwareUsabilityID):
     conn = Db.connect_to_database()
     cursor = conn.cursor()
-    cursor.execute("DELETE FROM SoftwareUsability WHERE SoftwareUsabilityID=?", (SoftwareUsabilityID,))
+    cursor.execute("DELETE FROM SoftwareUsability WHERE SoftwareUsabilityID=%s", (SoftwareUsabilityID,))
     conn.commit()
     conn.close()
 
@@ -29,7 +31,7 @@ def delete_softwareUsability(SoftwareUsabilityID):
 def query_softwareUsability(SoftwareUsabilityID):
     conn = Db.connect_to_database()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM SoftwareUsability WHERE SoftwareUsabilityID=?", (SoftwareUsabilityID,))
+    cursor.execute("SELECT * FROM SoftwareUsability WHERE SoftwareUsabilityID=%s", (SoftwareUsabilityID,))
     softwareUsability_data = cursor.fetchone()
     conn.close()
     return softwareUsability_data
