@@ -19,6 +19,7 @@ def generate_verification_key(length=16):
     verification_key = ''.join(secrets.choice(characters) for _ in range(length))
     return verification_key
 
+# Kullanıcı giriş endpoint'i
 @app.route('/login', methods=['POST'])
 def login():
     # İstek verilerini al
@@ -50,6 +51,7 @@ def login():
         conn.close()
         return jsonify({'success': False, 'message': 'User not found'}), 404
     
+# Kullanıcı kayıt endpoint'i
 @app.route('/add_user', methods=['POST'])
 def add_user_endpoint():
     request_data = request.json
@@ -136,6 +138,15 @@ def get_all_softwareUsabilitys_endpoint():
     else:
         return jsonify({"message": "No Software Usability found"}), 404
 
+# Tüm SoftwareUsabilityleri getiren endpoint
+@app.route('/softwareUsabilityUnApproved', methods=['GET'])
+def get_all_softwareUsabilityUnApproved_endpoint():
+    softwareUsability = sUF.get_all_softwareUsabilityUnApproved()
+    if softwareUsability:
+        return jsonify(softwareUsability), 200
+    else:
+        return jsonify({"message": "No Software Usability found"}), 404
+
 # Belirli bir SoftwareUsabilityID'ye göre SoftwareUsability tablosundan veri sorgulama endpoint'i
 @app.route('/query_softwareUsability/<int:SoftwareUsabilityID>', methods=['GET'])
 def query_softwareUsability_endpoint(SoftwareUsabilityID):
@@ -210,11 +221,12 @@ def add_owner_endpoint():
     userpassword = request_data.get('userpassword')
     usercity = request_data.get('usercity')
     role_id = request_data.get('role_id')
+    softwareproduct = request_data.get('softwareproduct')
     conn = Db.connect_to_database()
     verification_key = generate_verification_key()
     print (verification_key)
     # E-posta gönderme işlemi
-    so.add_softwareOwner(username, usersurname, useremail, userpassword, usercity, role_id, verification_key)
+    so.add_softwareOwner(username, usersurname, useremail, userpassword, usercity, role_id, verification_key,softwareproduct)
     ms.sendMailSoftwareOwner(useremail, verification_key)
     
     return f"Your register request send to admin"
@@ -250,6 +262,8 @@ def ownerlogin():
         # User bulunamadı, login basarisiz
         conn.close()
         return jsonify({'success': False, 'message': 'Owner not found'}), 404
+    
+# Software Owner doğrulama
 @app.route('/verifyowner', methods=['GET'])
 def verifyOwner():
     # Kullanıcıyı doğrula
@@ -268,5 +282,42 @@ def verifyOwner():
         conn.close()
         return "Invalid verification key"
 
+# Blog onaylama
+@app.route('/approveblog', methods=['POST'])
+def approveBlog():
+    request_data = request.json
+    blog_id = request_data.get('blog_id')
+    conn = Db.connect_to_database()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM Blog WHERE blogid = %s", (blog_id,))
+    user = cursor.fetchone()
+    if user:
+        cursor.execute("UPDATE blog SET approved = TRUE WHERE blogid= %s", (blog_id,))
+        conn.commit()
+        conn.close()
+        return "Blog approved successfully"
+    else:
+        conn.close()
+        return "Invalid blog id"
+    
+
+# Software Usability onaylama
+@app.route('/approvesoftwareusability', methods=['POST'])
+def approveSoftwareUsability():
+    request_data = request.json
+    softwareusability_id = request_data.get('softwareusability_id')
+    conn = Db.connect_to_database()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM softwareusability WHERE softwareusabilityid = %s", (softwareusability_id,))
+    user = cursor.fetchone()
+    if user:
+        cursor.execute("UPDATE softwareusability SET approved = TRUE WHERE softwareusabilityid= %s", (softwareusability_id,))
+        conn.commit()
+        conn.close()
+        return "Software usability approved successfully"
+    else:
+        conn.close()
+        return "Invalid software usability id"
+    
 if __name__ == '__main__':
     app.run(debug=True)
