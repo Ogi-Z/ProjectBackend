@@ -75,40 +75,40 @@ CREATE DATABASE tempDB;
     -- SoftwareUsability Owner tablosunu oluşturma
     CREATE TABLE IF NOT EXISTS SoftwareOwner (
 
-    OwnerID SERIAL PRIMARY KEY,
+    	OwnerID SERIAL PRIMARY KEY,
 
-    OwnerName VARCHAR(255),
+    	OwnerName VARCHAR(255),
     
-    OwnerSurname VARCHAR(255),
+    	OwnerSurname VARCHAR(255),
     
-    OwnerEmail VARCHAR(255) UNIQUE,
+    	OwnerEmail VARCHAR(255) UNIQUE,
     
-    OwnerPassword VARCHAR(255),
+    	OwnerPassword VARCHAR(255),
 
-    OwnersSoftware VARCHAR(255),
+    	OwnersSoftware VARCHAR(255),
     
-    OwnerCity VARCHAR(255),
+    	OwnerCity VARCHAR(255),
     
-    RoleID INTEGER,
+    	RoleID INTEGER,
     
-    VerificationKey VARCHAR(100),
+    	VerificationKey VARCHAR(100),
     
-    IsVerified BOOLEAN DEFAULT FALSE
+    	IsVerified BOOLEAN DEFAULT FALSE
 
     );
     
     -- SoftwareUsabilityComments Tablosunu oluşturma
     CREATE TABLE softwareusabilitycomments (
     
-    commentid SERIAL PRIMARY KEY,
+    	commentid SERIAL PRIMARY KEY,
     
-    userid INTEGER NOT NULL,
+    	userid INTEGER NOT NULL,
     
-    softwareusabilityid INTEGER NOT NULL,
+    	softwareusabilityid INTEGER NOT NULL,
     
-    commenttext TEXT NOT NULL,
+    	commenttext TEXT NOT NULL,
     
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
 
 
