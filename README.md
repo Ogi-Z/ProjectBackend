@@ -67,6 +67,10 @@ CREATE DATABASE tempDB;
 
         SoftwareUsabilityImage BYTEA,
 
+ 	Likes INTEGER,
+
+  	Dislikes INTEGER,
+
 	Approved BOOLEAN DEFAULT FALSE,
  
         FOREIGN KEY (UserID) REFERENCES Users(UserID)
