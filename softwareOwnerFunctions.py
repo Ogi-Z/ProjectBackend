@@ -5,10 +5,10 @@ import secrets
 import MailSender as ms
 
 # Software Owner ekleme fonksiyonu
-def add_softwareOwner(username, usersurname, useremail, userpassword, usercity, role_id, verification_key):
+def add_softwareOwner(username, usersurname, useremail, userpassword, ownersSoftware ,usercity, role_id, verification_key):
     conn = Db.connect_to_database()
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO softwareowner (OwnerName, OwnerSurname, OwnerEmail, OwnerPassword, OwnerCity, RoleID, VerificationKey) VALUES (%s, %s, %s, %s, %s, %s, %s)", (username, usersurname, useremail, userpassword, usercity, role_id, verification_key))
+    cursor.execute("INSERT INTO softwareowner (OwnerName, OwnerSurname, OwnerEmail, OwnerPassword, OwnersSoftware, OwnerCity, RoleID, VerificationKey) VALUES (%s, %s, %s, %s, %s, %s, %s)", (username, usersurname, useremail, userpassword, ownersSoftware,usercity, role_id, verification_key))
     conn.commit()
     conn.close()
 
