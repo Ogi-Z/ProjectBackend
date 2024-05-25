@@ -221,6 +221,7 @@ def add_owner_endpoint():
     usersurname = request_data.get('usersurname')
     useremail = request_data.get('useremail')
     userpassword = request_data.get('userpassword')
+    ownersoftware = request_data.get('ownersoftware')
     usercity = request_data.get('usercity')
     role_id = request_data.get('role_id')
     softwareproduct = request_data.get('softwareproduct')
@@ -228,7 +229,7 @@ def add_owner_endpoint():
     verification_key = generate_verification_key()
     print (verification_key)
     # E-posta gönderme işlemi
-    so.add_softwareOwner(username, usersurname, useremail, userpassword, usercity, role_id, verification_key,softwareproduct)
+    so.add_softwareOwner(username, usersurname, useremail, userpassword, ownersoftware, usercity, role_id, verification_key, softwareproduct)
     ms.sendMailSoftwareOwner(useremail, verification_key)
     
     return f"Your register request send to admin"
