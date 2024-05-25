@@ -204,6 +204,15 @@ def get_all_blogs_endpoint():
     else:
         return jsonify({"message": "No users found"}), 404
 
+# Unverified software ownerları getiren endpoint
+@app.route('/unverifiedsoftwareowners', methods=['GET'])
+def get_all_unverified_softwareowners_endpoint():
+    owners = so.get_all_unverified_owners()
+    if owners:
+        return jsonify(owners), 200
+    else:
+        return jsonify({"message": "No Software Owner found"}), 404
+    
 # Tüm software ownerları getiren endpoint  
 @app.route('/softwareowners', methods=['GET'])
 def get_all_softwareowners_endpoint():

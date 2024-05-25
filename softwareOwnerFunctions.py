@@ -75,3 +75,11 @@ def verify_owner(verificationkey):
     else:
         return False
     
+# Unverified SoftwareOwners getiren fonksiyon
+def get_all_unverified_owners():
+    conn = Db.connect_to_database()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM softwareowner WHERE IsVerified = False")
+    users = cursor.fetchall()
+    conn.close()
+    return users
