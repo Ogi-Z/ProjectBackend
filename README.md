@@ -93,6 +93,7 @@ CREATE DATABASE tempDB;
 
     );
     
+    -- SoftwareUsabilityComments Tablosunu oluşturma
     CREATE TABLE softwareusabilitycomments (
     
     commentid SERIAL PRIMARY KEY,
