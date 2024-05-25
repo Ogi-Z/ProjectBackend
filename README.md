@@ -65,9 +65,7 @@ CREATE DATABASE tempDB;
 
         SoftwareUsabilityImage BYTEA,
 
-	    Approved BOOLEAN DEFAULT FALSE,
-
-	    commenttext TEXT,
+	Approved BOOLEAN DEFAULT FALSE,
  
         FOREIGN KEY (UserID) REFERENCES Users(UserID)
     );
@@ -94,6 +92,20 @@ CREATE DATABASE tempDB;
     IsVerified BOOLEAN DEFAULT FALSE
 
     );
+    
+    CREATE TABLE softwareusabilitycomments (
+    
+    commentid SERIAL PRIMARY KEY,
+    
+    userid INTEGER NOT NULL,
+    
+    softwareusabilityid INTEGER NOT NULL,
+    
+    commenttext TEXT NOT NULL,
+    
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 
 );
 
