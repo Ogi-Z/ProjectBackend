@@ -169,14 +169,15 @@ def add_blog_endpoint():
     request_data = request.json
     user_id = request_data.get('user_id')
     blog_category = request_data.get('blog_category')
+    blog_title = request_data.get('blog_title')
     blog_text = request_data.get('blog_text')
     if 'image' in request.files:
         file = request.files['image']
         image_data = file.read()
-        bF.add_blog_with_image(user_id, blog_category, blog_text,image_data)
+        bF.add_blog_with_image(user_id, blog_category, blog_title, blog_text, image_data)
     else:
         image_data = None
-        bF.add_blog(user_id, blog_category, blog_text)
+        bF.add_blog(user_id, blog_category,blog_title, blog_text)
     return jsonify({"message": "Blog added successfully"}), 200
 
 # Belirli bir BlogID'ye göre Blog tablosundan veri sorgulama endpoint'i

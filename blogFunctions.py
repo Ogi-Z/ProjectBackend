@@ -5,22 +5,22 @@ import secrets
 import MailSender as ms
 
 # Blog tablosuna veri ekleme fonksiyonu
-def add_blog(user_id, blog_category, blog_text):
+def add_blog(user_id, blog_category,BlogTitle, blog_text):
     conn = Db.connect_to_database()
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO Blog (userid, blogcategory, blogtext) VALUES (%s, %s, %s)", (user_id, blog_category, blog_text))
+    cursor.execute("INSERT INTO Blog (userid, blogcategory,BlogTitle, blogtext) VALUES (%s, %s,%s, %s)", (user_id, blog_category, BlogTitle ,blog_text))
     conn.commit()
     conn.close()
 
 # Blog tablosuna fotoğraflı veri ekleme fonksiyonu
-def add_blog_with_image(user_id, blog_category, blog_text,image_data):
+def add_blog_with_image(user_id, blog_category,BlogTitle , blog_text,image_data):
     conn = Db.connect_to_database()
     cursor = conn.cursor()
     query = """
-        INSERT INTO Blog (UserID, BlogCategory, BlogText, BlogImage)
-        VALUES (%s, %s, %s);
+        INSERT INTO Blog (UserID, BlogCategory,BlogTitle, BlogText, BlogImage)
+        VALUES (%s, %s, %s, %s);
         """
-    cursor.execute(query, (user_id, blog_category, blog_text, image_data))
+    cursor.execute(query, (user_id, blog_category, BlogTitle, blog_text, image_data))
     conn.commit()
     conn.close()
 
