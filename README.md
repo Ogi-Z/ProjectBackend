@@ -82,6 +82,8 @@ CREATE DATABASE tempDB;
     OwnerEmail VARCHAR(255) UNIQUE,
     
     OwnerPassword VARCHAR(255),
+
+    OwnersSoftware VARCHAR(255),
     
     OwnerCity VARCHAR(255),
     
