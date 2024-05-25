@@ -409,5 +409,27 @@ def dislike_blog_endpoint():
     bF.dislike_blog(blog_id)
     return jsonify({"message": "Blog disliked successfully"}), 200
 
+# Blog Update endpoint'i
+@app.route('/update_blog', methods=['POST'])
+def update_blog_endpoint():
+    request_data = request.json
+    blog_id = request_data.get('blog_id')
+    user_id = request_data.get('user_id')
+    blog_category = request_data.get('blog_category')
+    blog_title = request_data.get('blog_title')
+    blog_text = request_data.get('blog_text')
+    bF.update_blog(user_id, blog_id, blog_category, blog_title, blog_text)
+    return jsonify({"message": "Blog updated successfully"}), 200
+
+# Software Usability Update endpoint'i
+@app.route('/update_softwareusability', methods=['POST'])
+def update_softwareusability_endpoint():
+    request_data = request.json
+    softwareusability_id = request_data.get('softwareusability_id')
+    softwareusability_topicname = request_data.get('softwareusability_topicname')
+    softwareusability_text = request_data.get('softwareusability_text')
+    sUF.update_softwareusability(softwareusability_id, softwareusability_topicname, softwareusability_text)
+    return jsonify({"message": "Software usability updated successfully"}), 200
+
 if __name__ == '__main__':
     app.run(debug=True)

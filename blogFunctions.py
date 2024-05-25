@@ -94,3 +94,14 @@ def dislike_blog(blog_id):
     cursor.execute("UPDATE Blog SET Dislike = Dislike + 1 WHERE BlogID=%s", (blog_id,))
     conn.commit()
     conn.close()
+
+# Update Blog Fonksiyonu
+def update_blog(user_id, blog_id, blog_category,BlogTitle, blog_text):
+    conn = Db.connect_to_database()
+    cursor = conn.cursor()
+    if(user_id == 1):
+        cursor.execute("UPDATE Blog SET BlogCategory=%s, BlogTitle=%s, BlogText=%s WHERE BlogID=%s", (blog_category, BlogTitle, blog_text, blog_id))
+        conn.commit()
+    else:
+        return jsonify ({"message": "You are not authorized to update this blog"})
+    conn.close()
