@@ -54,19 +54,19 @@ CREATE DATABASE tempDB;
     CREATE TABLE SoftwareUsability (
 
         SoftwareUsabilityID SERIAL PRIMARY KEY,
-        
+    
         UserID INTEGER,
-    
+
         SoftwareUsabilitySoftware VARCHAR(255),
-    
+
         SoftwareUsabilityTopicName VARCHAR(255),
-    
+
         SoftwareUsabilityText TEXT,
 
         SoftwareUsabilityImage BYTEA,
 
-    	Approved BOOLEAN DEFAULT FALSE,
-     
+	Approved BOOLEAN DEFAULT FALSE,
+ 
         FOREIGN KEY (UserID) REFERENCES Users(UserID)
     );
 
@@ -92,6 +92,21 @@ CREATE DATABASE tempDB;
     IsVerified BOOLEAN DEFAULT FALSE
 
     );
+    
+    -- SoftwareUsabilityComments Tablosunu oluşturma
+    CREATE TABLE softwareusabilitycomments (
+    
+    commentid SERIAL PRIMARY KEY,
+    
+    userid INTEGER NOT NULL,
+    
+    softwareusabilityid INTEGER NOT NULL,
+    
+    commenttext TEXT NOT NULL,
+    
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+
 
 );
 
