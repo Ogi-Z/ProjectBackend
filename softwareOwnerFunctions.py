@@ -8,7 +8,7 @@ import MailSender as ms
 def add_softwareOwner(username, usersurname, useremail, userpassword, ownersSoftware ,usercity, role_id, verification_key):
     conn = Db.connect_to_database()
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO softwareowner (OwnerName, OwnerSurname, OwnerEmail, OwnerPassword, OwnersSoftware, OwnerCity, RoleID, VerificationKey) VALUES (%s, %s, %s, %s, %s, %s, %s)", (username, usersurname, useremail, userpassword, ownersSoftware,usercity, role_id, verification_key))
+    cursor.execute("INSERT INTO softwareowner (OwnerName, OwnerSurname, OwnerEmail, OwnerPassword, OwnersSoftware, OwnerCity, RoleID, VerificationKey) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", (username, usersurname, useremail, userpassword, ownersSoftware,usercity, role_id, verification_key))
     conn.commit()
     conn.close()
 
@@ -59,7 +59,7 @@ def login_owner(email, password):
     else:
         # Kullanıcı bulunamadı
         return False
-    
+
 
 # SoftwareOwner verify etme fonksiyonu
 def verify_owner(verificationkey):
