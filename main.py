@@ -234,7 +234,6 @@ def add_owner_endpoint():
     ownersoftware = request_data.get('ownersoftware')
     usercity = request_data.get('usercity')
     role_id = request_data.get('role_id')
-    softwareproduct = request_data.get('softwareproduct')
     conn = Db.connect_to_database()
     verification_key = generate_verification_key()
     print (verification_key)
