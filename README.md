@@ -46,9 +46,9 @@ CREATE DATABASE tempDB;
 
         BlogImage BYTEA,
 
- 	Likes INTEGER,
+ 		Likes INTEGER,
 
-  	Dislikes INTEGER, 	
+  		Dislikes INTEGER, 	
 
         Approved BOOLEAN DEFAULT FALSE,
     
@@ -71,9 +71,9 @@ CREATE DATABASE tempDB;
 
         SoftwareUsabilityImage BYTEA,
 
- 	Likes INTEGER,
+ 		Likes INTEGER,
 
-  	Dislikes INTEGER,
+  		Dislikes INTEGER,
 
 	Approved BOOLEAN DEFAULT FALSE,
  
