@@ -431,5 +431,16 @@ def update_softwareusability_endpoint():
     sUF.update_softwareusability(softwareusability_id, softwareusability_topicname, softwareusability_text)
     return jsonify({"message": "Software usability updated successfully"}), 200
 
+#Software Owner Software Usabilitylerini görüntüleme endpoint'i
+@app.route('/softwareusabilitiesOwner', methods=['GET'])
+def get_softwareusabilities():
+    request_data = request.json
+    softwarename = request_data.get('softwarename')   
+    softwareusabilities = so.view_software(softwarename)
+    if softwareusabilities:
+        return jsonify(softwareusabilities), 200
+    else:
+        return jsonify({"message": "No software usabilities found"}), 404
+
 if __name__ == '__main__':
     app.run(debug=True)

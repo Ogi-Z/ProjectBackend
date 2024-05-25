@@ -83,3 +83,12 @@ def get_all_unverified_owners():
     users = cursor.fetchall()
     conn.close()
     return users
+
+# SoftwareOwner Software görüntüleme fonksiyonu
+def view_software(OwnersSoftware):
+    conn = Db.connect_to_database()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM SoftwareUsability WHERE SoftwareUsabilitySoftware  = %s", (OwnersSoftware,))
+    software = cursor.fetchone()
+    conn.close()
+    return software
