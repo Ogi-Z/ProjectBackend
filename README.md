@@ -104,7 +104,7 @@ CREATE DATABASE tempDB;
     commenttext TEXT NOT NULL,
     
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+    );
 
 
 );
