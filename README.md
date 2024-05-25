@@ -39,6 +39,8 @@ CREATE DATABASE tempDB;
         UserID INTEGER,
     
         BlogCategory VARCHAR(255),
+
+ 	BlogTitle VARCHAR(255),
     
         BlogText TEXT,
 
