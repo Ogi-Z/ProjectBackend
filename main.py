@@ -202,6 +202,7 @@ def get_all_blogs_endpoint():
         return jsonify(blog), 200
     else:
         return jsonify({"message": "No users found"}), 404
+
 # Tüm software ownerları getiren endpoint  
 @app.route('/softwareowners', methods=['GET'])
 def get_all_softwareowners_endpoint():
@@ -338,5 +339,34 @@ def unapprovedBlogs():
     else:
         return jsonify({"message": "No users found"}), 404
     
+# SoftwareUsability yorum ekleme endpoint'i
+@app.route('/add_softwareUsabilityComment', methods=['POST'])
+def add_softwareUsabilityComment_endpoint():
+    request_data = request.json
+    user_id = request_data.get('user_id')
+    softwareusability_id = request_data.get('softwareusability_id')
+    comment_text = request_data.get('comment_text')
+    sUF.add_softwareusability_comment(user_id, softwareusability_id, comment_text)
+    return jsonify({"message": "Software usability comment added successfully"}), 200
+
+# Software Usability yorumları getiren endpoint
+@app.route('/softwareUsabilityComments/<int:softwareusability_id>', methods=['GET'])
+def get_softwareUsabilityComments_endpoint(softwareusability_id):
+    comments = sUF.get_softwareusability_comments(softwareusability_id)
+    if comments:
+        return jsonify(comments), 200
+    else:
+        return jsonify({"message": "No comments found"}), 404
+    
+# Software Usability Softwarelarını getiren endpoint
+@app.route('/softwareUsabilitySoftwares', methods=['GET'])
+def get_softwareUsabilitySoftwares_endpoint():
+    softwares = sUF.get_softwareusability_softwares()
+    if softwares:
+        return jsonify(softwares), 200
+    else:
+        return jsonify({"message": "No softwares found"}), 404
+
+
 if __name__ == '__main__':
     app.run(debug=True)

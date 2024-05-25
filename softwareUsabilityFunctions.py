@@ -60,3 +60,30 @@ def approve_softwareusability(softwareusability_id):
     cursor.execute("UPDATE softwareusability SET Approved = True WHERE softwareusabilityid=%s", (softwareusability_id,))
     conn.commit()
     conn.close()
+
+# SoftwareUsability Add Comment
+def add_softwareusability_comment(userid, softwareusability_id, comment_text):
+    conn = Db.connect_to_database()
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO softwareusabilitycomments (userid, softwareusabilityid, commenttext) VALUES (%s,%s, %s)", (userid, softwareusability_id, comment_text))
+    conn.commit()
+    conn.close()
+
+# SoftwareUsability Get Comments
+def get_softwareusability_comments(softwareusability_id):
+    conn = Db.connect_to_database()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM softwareusabilitycomments WHERE softwareusabilityid=%s", (softwareusability_id,))
+    comments = cursor.fetchall()
+    conn.close()
+    return comments
+
+# SoftwareUsability Get Softwares
+def get_softwareusability_softwares():
+    conn = Db.connect_to_database()
+    cursor = conn.cursor()
+    cursor.execute("SELECT SoftwareUsabilitySoftware FROM softwareusability")
+    softwareusabilities = cursor.fetchall()
+    conn.close()
+    return softwareusabilities
+
