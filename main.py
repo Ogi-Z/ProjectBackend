@@ -377,7 +377,22 @@ def get_softwareUsabilitySoftwares_endpoint():
         return jsonify(softwares), 200
     else:
         return jsonify({"message": "No softwares found"}), 404
+    
+# Software Usability beğenme endpoint'i
+@app.route('/like_softwareusability', methods=['POST'])
+def like_softwareusability_endpoint():
+    request_data = request.json
+    softwareusability_id = request_data.get('softwareusability_id')
+    sUF.like_softwareusability(softwareusability_id)
+    return jsonify({"message": "Software usability liked successfully"}), 200
 
+# Software Usability beğenmeme endpoint'i
+@app.route('/dislike_softwareusability', methods=['POST'])
+def dislike_softwareusability_endpoint():
+    request_data = request.json
+    softwareusability_id = request_data.get('softwareusability_id')
+    sUF.dislike_softwareusability(softwareusability_id)
+    return jsonify({"message": "Software usability disliked successfully"}), 200
 
 if __name__ == '__main__':
     app.run(debug=True)

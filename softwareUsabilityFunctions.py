@@ -87,4 +87,18 @@ def get_softwareusability_softwares():
     conn.close()
     return softwareusabilities
 
-# SoftwareOwner 
+# SoftwareUsability için beğenme fonksiyonu
+def like_softwareusability(softwareusability_id):
+    conn = Db.connect_to_database()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE softwareusability SET Likes = Likes + 1 WHERE softwareusabilityid=%s", (softwareusability_id,))
+    conn.commit()
+    conn.close()
+
+# SoftwareUsability için beğenmeme fonksiyonu
+def dislike_softwareusability(softwareusability_id):
+    conn = Db.connect_to_database()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE softwareusability SET Dislikes = Dislikes + 1 WHERE softwareusabilityid=%s", (softwareusability_id,))
+    conn.commit()
+    conn.close()
