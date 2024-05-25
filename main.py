@@ -239,7 +239,7 @@ def add_owner_endpoint():
     verification_key = generate_verification_key()
     print (verification_key)
     # E-posta gönderme işlemi
-    so.add_softwareOwner(username, usersurname, useremail, userpassword, ownersoftware, usercity, role_id, verification_key, softwareproduct)
+    so.add_softwareOwner(username, usersurname, useremail, userpassword, ownersoftware, usercity, role_id, verification_key)
     ms.sendMailSoftwareOwner(useremail, verification_key)
     
     return f"Your register request send to admin"
