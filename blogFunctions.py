@@ -78,3 +78,19 @@ def approve_blog(blog_id):
     cursor.execute("UPDATE Blog SET Approved = True WHERE BlogID=%s", (blog_id,))
     conn.commit()
     conn.close()
+
+# Blog Beğenme Fonksiyonu
+def like_blog(blog_id):
+    conn = Db.connect_to_database()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE Blog SET Like = Like + 1 WHERE BlogID=%s", (blog_id,))
+    conn.commit()
+    conn.close()
+
+# Blog Beğenmeme Fonksiyonu
+def dislike_blog(blog_id):
+    conn = Db.connect_to_database()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE Blog SET Dislike = Dislike + 1 WHERE BlogID=%s", (blog_id,))
+    conn.commit()
+    conn.close()

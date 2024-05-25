@@ -394,5 +394,21 @@ def dislike_softwareusability_endpoint():
     sUF.dislike_softwareusability(softwareusability_id)
     return jsonify({"message": "Software usability disliked successfully"}), 200
 
+# Blog beğenme endpoint'i
+@app.route('/like_blog', methods=['POST'])
+def like_blog_endpoint():
+    request_data = request.json
+    blog_id = request_data.get('blog_id')
+    bF.like_blog(blog_id)
+    return jsonify({"message": "Blog liked successfully"}), 200
+
+# Blog beğenmeme endpoint'i
+@app.route('/dislike_blog', methods=['POST'])
+def dislike_blog_endpoint():
+    request_data = request.json
+    blog_id = request_data.get('blog_id')
+    bF.dislike_blog(blog_id)
+    return jsonify({"message": "Blog disliked successfully"}), 200
+
 if __name__ == '__main__':
     app.run(debug=True)
