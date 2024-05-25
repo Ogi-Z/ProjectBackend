@@ -54,19 +54,21 @@ CREATE DATABASE tempDB;
     CREATE TABLE SoftwareUsability (
 
         SoftwareUsabilityID SERIAL PRIMARY KEY,
-        
+    
         UserID INTEGER,
-    
+
         SoftwareUsabilitySoftware VARCHAR(255),
-    
+
         SoftwareUsabilityTopicName VARCHAR(255),
-    
+
         SoftwareUsabilityText TEXT,
 
         SoftwareUsabilityImage BYTEA,
 
-    	Approved BOOLEAN DEFAULT FALSE,
-     
+	    Approved BOOLEAN DEFAULT FALSE,
+
+	    commenttext TEXT,
+ 
         FOREIGN KEY (UserID) REFERENCES Users(UserID)
     );
 
