@@ -263,13 +263,13 @@ def ownerlogin():
             conn.close()
             if verified_owner:
             # Hersey Dogru, login basarili
-                return jsonify({'success': True}), 200
+               return jsonify({'success': True},{'id': user[0]}), 200
             else:
             # User verify edilmemis, login basarisiz
                 return jsonify({'success': False, 'message': 'Owner is not verified'}), 401
         else:
             # Sifre Yanlıs, login basarisiz
-            return jsonify({'success': False, 'message': 'Invalid password'}), 401
+            return jsonify({'success': False, 'message': 'Invalid password'}), 409
     else:
         # User bulunamadı, login basarisiz
         conn.close()
