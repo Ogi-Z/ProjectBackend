@@ -118,3 +118,12 @@ def delete_softwareusability_comment(comment_id):
     cursor.execute("DELETE FROM softwareusabilitycomments WHERE CommentID=%s", (comment_id,))
     conn.commit()
     conn.close()
+
+# SoftwareUsability Yorum güncelleme fonksiyonu
+def update_softwareusability_comment(comment_id, comment_text):
+    conn = Db.connect_to_database()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE softwareusabilitycomments SET CommentText = %s WHERE CommentID=%s", (comment_text, comment_id))
+    conn.commit()
+    conn.close()
+    

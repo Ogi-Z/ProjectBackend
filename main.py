@@ -457,6 +457,15 @@ def delete_softwareusability_comment_endpoint(comment_id):
     sUF.delete_softwareusability_comment(comment_id)
     return jsonify({"message": "Software usability comment deleted successfully"}), 200
 
+# SoftwareUsabilitylerin yorumlarını güncelleme endpoint'i
+@app.route('/update_softwareusability_comment', methods=['POST'])
+def update_softwareusability_comment_endpoint():
+    request_data = request.json
+    comment_id = request_data.get('comment_id')
+    comment_text = request_data.get('comment_text')
+    sUF.update_softwareusability_comment(comment_id, comment_text)
+    return jsonify({"message": "Software usability comment updated successfully"}), 200
+
 if __name__ == '__main__':
     app.run(debug=True)
 
