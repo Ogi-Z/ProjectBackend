@@ -105,3 +105,4 @@ def update_blog(user_id, blog_id, blog_category,BlogTitle, blog_text):
     else:
         return jsonify ({"message": "You are not authorized to update this blog"})
     conn.close()
+

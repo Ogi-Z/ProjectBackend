@@ -442,7 +442,7 @@ def get_softwareusabilities():
     else:
         return jsonify({"message": "No software usabilities found"}), 404
 
-# Software Ownerlar için ownerid'ye göre sorgulama
+# Software Ownerlar için ownerid'ye göre sorgulama endpoint'i
 @app.route('/query_softwareowner/<int:owner_id>', methods=['GET'])
 def query_softwareowner_endpoint(owner_id):
     owner_data = so.query_owner(owner_id)
@@ -451,6 +451,12 @@ def query_softwareowner_endpoint(owner_id):
     else:
         return jsonify({"message": "Software Owner not found"}), 404
     
+# SoftwareUsabilitylerin yorumlarını silme endpoint'i
+@app.route('/delete_softwareusability_comment/<int:comment_id>', methods=['DELETE'])
+def delete_softwareusability_comment_endpoint(comment_id):
+    sUF.delete_softwareusability_comment(comment_id)
+    return jsonify({"message": "Software usability comment deleted successfully"}), 200
+
 if __name__ == '__main__':
     app.run(debug=True)
 
