@@ -259,5 +259,16 @@ def verifyOwner():
         conn.close()
         return "Invalid verification key"
 
+# Software Ownerlar için ownerid'ye göre sorgulama
+@app.route('/query_softwareOwner', methods=['GET'])
+def query_softwareOwner_endpoint():
+    request_data = request.json
+    owner_id = request_data.get('owner_id')
+    owner_data = so.query_owner(owner_id)
+    if owner_data:
+        return jsonify(owner_data), 200
+    else:
+        return jsonify({"message": "Owner not found"}), 404
+    
 if __name__ == '__main__':
     app.run(debug=True)
