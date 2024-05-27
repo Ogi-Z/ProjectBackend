@@ -126,4 +126,12 @@ def update_softwareusability_comment(comment_id, comment_text):
     cursor.execute("UPDATE softwareusabilitycomments SET CommentText = %s WHERE CommentID=%s", (comment_text, comment_id))
     conn.commit()
     conn.close()
+
+# SoftwareUsability Güncelleme fonksiyonu
+def update_softwareusability(softwareusability_id, softwareusability_topicname, softwareusability_text):
+    conn = Db.connect_to_database()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE softwareusability SET SoftwareUsabilityTopicName = %s, SoftwareUsabilityText = %s WHERE SoftwareUsabilityID=%s", (softwareusability_topicname, softwareusability_text, softwareusability_id))
+    conn.commit()
+    conn.close()
     

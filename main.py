@@ -466,6 +466,16 @@ def update_softwareusability_comment_endpoint():
     sUF.update_softwareusability_comment(comment_id, comment_text)
     return jsonify({"message": "Software usability comment updated successfully"}), 200
 
+# SoftwareUsabilitylerin Günceleme endpoint'i
+@app.route('/update_softwareusability', methods=['POST'])
+def update_softwareusability_endpoint():
+    request_data = request.json
+    softwareusability_id = request_data.get('softwareusability_id')
+    softwareusability_topicname = request_data.get('softwareusability_topicname')
+    softwareusability_text = request_data.get('softwareusability_text')
+    sUF.update_softwareusability(softwareusability_id, softwareusability_topicname, softwareusability_text)
+    return jsonify({"message": "Software usability updated successfully"}), 200
+
 if __name__ == '__main__':
     app.run(debug=True)
 
