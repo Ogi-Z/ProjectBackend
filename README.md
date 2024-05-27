@@ -34,13 +34,23 @@ CREATE DATABASE tempDB;
 
     CREATE TABLE Blog (
 
+        BlogID SERIAL PRIMARY KEY,
+
         UserID INTEGER,
     
-        BlogID INTEGER PRIMARY KEY,
-    
         BlogCategory VARCHAR(255),
+
+ 	BlogTitle VARCHAR(255),
     
         BlogText TEXT,
+
+        BlogImage BYTEA,
+
+ 	 Likes INTEGER,
+
+  	 Dislikes INTEGER, 	
+
+        Approved BOOLEAN DEFAULT FALSE,
     
         FOREIGN KEY (UserID) REFERENCES Users(UserID)
     );
@@ -48,42 +58,67 @@ CREATE DATABASE tempDB;
     -- SoftwareUsability tablosunu oluşturma
 
     CREATE TABLE SoftwareUsability (
+
+        SoftwareUsabilityID SERIAL PRIMARY KEY,
     
         UserID INTEGER,
-    
-        SoftwareUsabilityID INTEGER PRIMARY KEY,
-    
+
         SoftwareUsabilitySoftware VARCHAR(255),
-    
+
         SoftwareUsabilityTopicName VARCHAR(255),
-    
+
         SoftwareUsabilityText TEXT,
-    
+
+        SoftwareUsabilityImage BYTEA,
+
+ 	 Likes INTEGER,
+
+  	 Dislikes INTEGER,
+
+	 Approved BOOLEAN DEFAULT FALSE,
+ 
         FOREIGN KEY (UserID) REFERENCES Users(UserID)
     );
 
     -- SoftwareUsability Owner tablosunu oluşturma
     CREATE TABLE IF NOT EXISTS SoftwareOwner (
 
-    OwnerID SERIAL PRIMARY KEY,
+    	OwnerID SERIAL PRIMARY KEY,
 
-    OwnerName VARCHAR(255),
+    	OwnerName VARCHAR(255),
     
-    OwnerSurname VARCHAR(255),
+    	OwnerSurname VARCHAR(255),
     
-    OwnerEmail VARCHAR(255) UNIQUE,
+    	OwnerEmail VARCHAR(255) UNIQUE,
     
-    OwnerPassword VARCHAR(255),
+    	OwnerPassword VARCHAR(255),
+
+    	OwnersSoftware VARCHAR(255),
     
-    OwnerCity VARCHAR(255),
+    	OwnerCity VARCHAR(255),
     
-    RoleID INTEGER,
+    	RoleID INTEGER,
     
-    VerificationKey VARCHAR(100),
+    	VerificationKey VARCHAR(100),
     
-    IsVerified BOOLEAN DEFAULT FALSE
+    	IsVerified BOOLEAN DEFAULT FALSE
 
     );
+    
+    -- SoftwareUsabilityComments Tablosunu oluşturma
+    CREATE TABLE softwareusabilitycomments (
+    
+    	commentid SERIAL PRIMARY KEY,
+    
+    	userid INTEGER NOT NULL,
+    
+    	softwareusabilityid INTEGER NOT NULL,
+    
+    	commenttext TEXT NOT NULL,
+    
+    	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+
 
 );
 

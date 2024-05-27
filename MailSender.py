@@ -2,6 +2,7 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
+# E-posta gönderme fonksiyonu
 def sendMailSoftwareOwner(email, verificationKey):
     # Gönderici ve alıcı bilgileri
     gonderici = 'bubirddeneme@gmail.com'

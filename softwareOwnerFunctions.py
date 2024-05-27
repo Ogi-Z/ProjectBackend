@@ -5,10 +5,10 @@ import secrets
 import MailSender as ms
 
 # Software Owner ekleme fonksiyonu
-def add_softwareOwner(username, usersurname, useremail, userpassword, usercity, role_id, verification_key):
+def add_softwareOwner(username, usersurname, useremail, userpassword, ownersSoftware ,usercity, role_id, verification_key):
     conn = Db.connect_to_database()
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO softwareowner (OwnerName, OwnerSurname, OwnerEmail, OwnerPassword, OwnerCity, RoleID, VerificationKey) VALUES (%s, %s, %s, %s, %s, %s, %s)", (username, usersurname, useremail, userpassword, usercity, role_id, verification_key))
+    cursor.execute("INSERT INTO softwareowner (OwnerName, OwnerSurname, OwnerEmail, OwnerPassword, OwnersSoftware, OwnerCity, RoleID, VerificationKey) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", (username, usersurname, useremail, userpassword, ownersSoftware,usercity, role_id, verification_key))
     conn.commit()
     conn.close()
 
@@ -38,6 +38,7 @@ def get_all_owners():
     conn.close()
     return users
 
+# SoftwareOwner login fonksiyonu
 def login_owner(email, password):
     # Kullanıcıyı veritabanında bul
     conn = Db.connect_to_database()
@@ -58,6 +59,9 @@ def login_owner(email, password):
     else:
         # Kullanıcı bulunamadı
         return False
+
+
+# SoftwareOwner verify etme fonksiyonu
 def verify_owner(verificationkey):
     # Veritabanında kullanıcıyı bul ve doğrulama anahtarını kontrol et
     conn = Db.connect_to_database()
@@ -70,3 +74,21 @@ def verify_owner(verificationkey):
         return True
     else:
         return False
+    
+# Unverified SoftwareOwners getiren fonksiyon
+def get_all_unverified_owners():
+    conn = Db.connect_to_database()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM softwareowner WHERE IsVerified = False")
+    users = cursor.fetchall()
+    conn.close()
+    return users
+
+# SoftwareOwner Software görüntüleme fonksiyonu
+def view_software(OwnersSoftware):
+    conn = Db.connect_to_database()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM SoftwareUsability WHERE SoftwareUsabilitySoftware  = %s", (OwnersSoftware,))
+    software = cursor.fetchone()
+    conn.close()
+    return software
