@@ -360,4 +360,4 @@ MigrationBackup/
 .ionide/
 
 # Fody - auto-generated XML schema
-FodyWeavers.xsd
+FodyWeavers.xsd\n# Python / local secrets\n.env\n.env.*\n!.env.example\n.venv/\nvenv/\nmyenv/\n__pycache__/\n*.py[cod]\n
