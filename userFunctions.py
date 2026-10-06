@@ -1,13 +1,13 @@
 import DbConnection as Db
 import string
 from flask import Flask, request, jsonify
-import secrets
+import secrets\nfrom werkzeug.security import generate_password_hash, check_password_hash
 
 # User tablosuna veri ekleme fonksiyonu
 def add_user(username, usersurname, useremail, userpassword, usercity, role_id, verification_key):
     conn = Db.connect_to_database()
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO users (UserName, UserSurname, UserEmail, UserPassword, UserCity, RoleID, VerificationKey) VALUES (%s, %s, %s, %s, %s, %s, %s)", (username, usersurname, useremail, userpassword, usercity, role_id, verification_key))
+    cursor.execute("INSERT INTO users (UserName, UserSurname, UserEmail, UserPassword, UserCity, RoleID, VerificationKey) VALUES (%s, %s, %s, %s, %s, %s, %s)", (username, usersurname, useremail, generate_password_hash(userpassword), usercity, role_id, verification_key))
     conn.commit()
     conn.close()
 
