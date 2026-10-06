@@ -1,18 +1,17 @@
+import os
 import psycopg2
 
-# Veritabanı bağlantısını yapar
+
 def connect_to_database():
     try:
-        # Veritabanı bağlantısını yap
         connection = psycopg2.connect(
-            dbname="tempDB",
-            user="postgres",
-            password="123",
-            host="localhost",
-            port="5432"
+            dbname=os.getenv("DB_NAME", "tempDB"),
+            user=os.getenv("DB_USER", "postgres"),
+            password=os.getenv("DB_PASSWORD"),
+            host=os.getenv("DB_HOST", "localhost"),
+            port=os.getenv("DB_PORT", "5432"),
         )
-        print("Veritabanına başarıyla bağlandı.")
         return connection
-    except psycopg2.Error as e:
-        print("Veritabanına bağlanırken bir hata oluştu:", e)
+    except psycopg2.Error as exc:
+        print("Database connection failed:", exc)
         return None
