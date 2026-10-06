@@ -1,68 +1,45 @@
+import os
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-# E-posta gönderme fonksiyonu
+SMTP_HOST = os.getenv("SMTP_HOST", "smtp.gmail.com")
+SMTP_PORT = int(os.getenv("SMTP_PORT", "587"))
+SMTP_USER = os.getenv("SMTP_USER")
+SMTP_PASSWORD = os.getenv("SMTP_PASSWORD")
+SMTP_FROM = os.getenv("SMTP_FROM", SMTP_USER or "")
+
+
+def _send_email(recipient, subject, body):
+    if not SMTP_USER or not SMTP_PASSWORD or not SMTP_FROM:
+        raise RuntimeError(
+            "SMTP configuration is missing. Set SMTP_USER, SMTP_PASSWORD and optionally SMTP_FROM."
+        )
+
+    msg = MIMEMultipart()
+    msg["From"] = SMTP_FROM
+    msg["To"] = recipient
+    msg["Subject"] = subject
+    msg.attach(MIMEText(body, "plain"))
+
+    with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
+        server.starttls()
+        server.login(SMTP_USER, SMTP_PASSWORD)
+        server.sendmail(SMTP_FROM, recipient, msg.as_string())
+
+
 def sendMailSoftwareOwner(email, verificationKey):
-    # Gönderici ve alıcı bilgileri
-    gonderici = 'bubirddeneme@gmail.com'
-    alici = 'bubirddeneme@gmail.com'
-    # E-posta başlık ve içeriği
-    baslik = 'Verification Code for Coma Gen-e' # buraya kayıt olma doğrulama zart zurt yazılır
-    icerik = f'Hello Welcome To Coma Gen-e. Here is your verification code: {verificationKey}, The Software Owners E-Mail is: {email}' # buraya doğrulama kodu yazılır 
-    # SMTP sunucu ve bağlantı bilgileri
-    # bu kısma hiç dokunma 
-    smtp_sunucu = 'smtp.gmail.com'
-    smtp_port = 587
-    kullanici = 'bubirddeneme@gmail.com'
-    sifre = 'kurn dljr pufh mmcm' 
-    # E-posta gövdesi oluşturma
-    msg = MIMEMultipart()
-    msg['From'] = gonderici
-    msg['To'] = alici
-    msg['Subject'] = baslik
-    msg.attach(MIMEText(icerik, 'plain'))
-    # SMTP bağlantısı ve e-posta gönderme
-    try:
-        server = smtplib.SMTP(smtp_sunucu, smtp_port)
-        server.starttls()
-        server.login(kullanici, sifre)
-        server.sendmail(gonderici, alici, msg.as_string())
-        print('E-posta başarıyla gönderildi.')
-    except Exception as e:
-        print('E-posta gönderme hatası:', e)
-    finally:
-        server.quit()
+    admin_email = os.getenv("SOFTWARE_OWNER_ADMIN_EMAIL", SMTP_FROM)
+    subject = "Verification Code for Coma Gen-e"
+    body = (
+        "Hello, welcome to Coma Gen-e. "
+        f"Verification code: {verificationKey}. "
+        f"Software owner email: {email}"
+    )
+    _send_email(admin_email, subject, body)
 
-def sendMail(alici, verificationKey):
-    # Gönderici ve alıcı bilgileri
-    gonderici = 'bubirddeneme@gmail.com'
-    # E-posta başlık ve içeriği
-    baslik = 'Verification Code for Coma Gen-e' # buraya kayıt olma doğrulama zart zurt yazılır
-    icerik = f'Hello Welcome To Coma Gen-e. Here is your verification code: {verificationKey}' # buraya doğrulama kodu yazılır 
 
-    # SMTP sunucu ve bağlantı bilgileri
-    # bu kısma hiç dokunma 
-    smtp_sunucu = 'smtp.gmail.com'
-    smtp_port = 587
-    kullanici = 'bubirddeneme@gmail.com'
-    sifre = 'kurn dljr pufh mmcm' 
-
-    # E-posta gövdesi oluşturma
-    msg = MIMEMultipart()
-    msg['From'] = gonderici
-    msg['To'] = alici
-    msg['Subject'] = baslik
-    msg.attach(MIMEText(icerik, 'plain'))
-
-    # SMTP bağlantısı ve e-posta gönderme
-    try:
-        server = smtplib.SMTP(smtp_sunucu, smtp_port)
-        server.starttls()
-        server.login(kullanici, sifre)
-        server.sendmail(gonderici, alici, msg.as_string())
-        print('E-posta başarıyla gönderildi.')
-    except Exception as e:
-        print('E-posta gönderme hatası:', e)
-    finally:
-        server.quit()
+def sendMail(recipient, verificationKey):
+    subject = "Verification Code for Coma Gen-e"
+    body = f"Hello, welcome to Coma Gen-e. Your verification code is: {verificationKey}"
+    _send_email(recipient, subject, body)
