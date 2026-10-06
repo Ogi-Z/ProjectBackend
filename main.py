@@ -7,7 +7,7 @@ import userFunctions as uf
 import softwareUsabilityFunctions as sUF
 import blogFunctions as bF
 import softwareOwnerFunctions as so
-from flask_cors import CORS
+from flask_cors import CORS\nfrom werkzeug.security import check_password_hash
 
 app = Flask(__name__)
 CORS(app)
@@ -32,7 +32,7 @@ def login():
     cursor.execute("SELECT * FROM users WHERE useremail = %s", (useremail,))
     user = cursor.fetchone()
     if user:
-        if user[4] == userpassword:  
+        if check_password_hash(user[4], userpassword):  
             # Sifre Dogru, isverified kontrolu yapma
             cursor.execute("SELECT * FROM users WHERE useremail = %s AND isverified = true", (useremail,))
             verified_user = cursor.fetchone()
@@ -256,7 +256,7 @@ def ownerlogin():
     cursor.execute("SELECT * FROM softwareowner WHERE owneremail = %s", (useremail,))
     user = cursor.fetchone()
     if user:
-        if user[4] == userpassword:  
+        if check_password_hash(user[4], userpassword):  
             # Sifre Dogru, isverified kontrolu yapma
             cursor.execute("SELECT * FROM softwareowner WHERE owneremail = %s AND isverified = true", (useremail,))
             verified_owner = cursor.fetchone()
